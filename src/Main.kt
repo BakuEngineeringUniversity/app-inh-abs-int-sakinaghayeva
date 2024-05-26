@@ -1,44 +1,111 @@
-abstract class Vehicle(val make: String, val model: String, val year: Int) {
+interface Person {
+    val name: String
+    val age: Int
+    fun introduce()
+}
 
-    abstract fun calculateMileage(): Double
-
-    fun displayInfo() {
-        println("Vehicle: $year $make $model")
-        println("Mileage: ${calculateMileage()} miles per gallon")
+abstract class SchoolMember(override val name: String, override val age: Int) : Person {
+    abstract val role: String
+    override fun introduce() {
+        println("Hello, my name is $name, I am $age years old and I am a $role.")
     }
 }
 
-interface ElectricVehicle {
-    val range: Double
+class Student(name: String, age: Int, val studentId: String) : SchoolMember(name, age) {
+    override val role = "Student"
+    private val courses: MutableList<String> = mutableListOf()
 
-    fun chargeBattery() {
-        println("Charging battery...")
+    fun enroll(course: String) {
+        if (course !in courses) {
+            courses.add(course)
+            println("$name has enrolled in $course")
+        } else {
+            println("$name is already enrolled in $course")
+        }
+    }
+
+    fun listCourses() {
+        if (courses.isNotEmpty()) {
+            println("$name is enrolled in: ${courses.joinToString(", ")}")
+        } else {
+            println("$name is not enrolled in any courses")
+        }
     }
 }
 
-open class Car(make: String, model: String, year: Int, val mileage: Double) : Vehicle(make, model, year) {
+class Teacher(name: String, age: Int, val teacherId: String) : SchoolMember(name, age) {
+    override val role = "Teacher"
+    private val subjects: MutableList<String> = mutableListOf()
 
-    override fun calculateMileage(): Double {
-        return mileage
+    fun assignSubject(subject: String) {
+        if (subject !in subjects) {
+            subjects.add(subject)
+            println("$name is now teaching $subject")
+        } else {
+            println("$name is already teaching $subject")
+        }
+    }
+
+    fun listSubjects() {
+        if (subjects.isNotEmpty()) {
+            println("$name teaches: ${subjects.joinToString(", ")}")
+        } else {
+            println("$name is not teaching any subjects")
+        }
     }
 }
 
-class ElectricCar(make: String, model: String, year: Int, mileage: Double, override val range: Double) : Car(make, model, year, mileage), ElectricVehicle {
+class School(val name: String) {
+    private val members: MutableList<SchoolMember> = mutableListOf()
 
-    override fun calculateMileage(): Double {
-        return range
+    fun addMember(member: SchoolMember) {
+        if (member !in members) {
+            members.add(member)
+            println("${member.name} has joined $name as a ${member.role}")
+        } else {
+            println("${member.name} is already a member of $name")
+        }
+    }
+
+    fun listMembers() {
+        println("Members of $name:")
+        if (members.isNotEmpty()) {
+            for (member in members) {
+                member.introduce()
+            }
+        } else {
+            println("No members in the school")
+        }
     }
 }
 
 fun main() {
-    val car = Car("Toyota", "Corolla", 2020, 35.5)
-    println("Car Information:")
-    car.displayInfo()
+    val mySchool = School("Green Valley High")
 
-    println()
+    val student1 = Student("Alice", 15, "S123")
+    val student2 = Student("Bob", 17, "S124")
+    val teacher1 = Teacher("Mr. Smith", 40, "T001")
+    val teacher2 = Teacher("Ms. Johnson", 35, "T002")
 
-    val electricCar = ElectricCar("Tesla", "Model 3", 2022, 0.0, 300.0)
-    println("Electric Car Information:")
-    electricCar.displayInfo()
-    electricCar.chargeBattery()
+    mySchool.addMember(student1)
+    mySchool.addMember(student2)
+    mySchool.addMember(teacher1)
+    mySchool.addMember(teacher2)
+
+    student1.enroll("Math")
+    student1.enroll("Science")
+    student2.enroll("History")
+
+    teacher1.assignSubject("Math")
+    teacher1.assignSubject("Physics")
+    teacher2.assignSubject("History")
+
+    mySchool.listMembers()
+
+
+    student1.listCourses()
+    student2.listCourses()
+
+    teacher1.listSubjects()
+    teacher2.listSubjects()
 }
