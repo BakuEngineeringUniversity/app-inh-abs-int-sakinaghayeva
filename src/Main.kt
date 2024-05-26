@@ -11,7 +11,7 @@ abstract class SchoolMember(override val name: String, override val age: Int) : 
     }
 }
 
-class Student(name: String, age: Int, val studentId: String) : SchoolMember(name, age) {
+class Student(name: String, age: Int) : SchoolMember(name, age) {
     override val role = "Student"
     private val courses: MutableList<String> = mutableListOf()
 
@@ -33,7 +33,7 @@ class Student(name: String, age: Int, val studentId: String) : SchoolMember(name
     }
 }
 
-class Teacher(name: String, age: Int, val teacherId: String) : SchoolMember(name, age) {
+class Teacher(name: String, age: Int) : SchoolMember(name, age) {
     override val role = "Teacher"
     private val subjects: MutableList<String> = mutableListOf()
 
@@ -55,7 +55,7 @@ class Teacher(name: String, age: Int, val teacherId: String) : SchoolMember(name
     }
 }
 
-class School(val name: String) {
+class School(private val name: String) {
     private val members: MutableList<SchoolMember> = mutableListOf()
 
     fun addMember(member: SchoolMember) {
@@ -82,10 +82,10 @@ class School(val name: String) {
 fun main() {
     val mySchool = School("Green Valley High")
 
-    val student1 = Student("Alice", 15, "S123")
-    val student2 = Student("Bob", 17, "S124")
-    val teacher1 = Teacher("Mr. Smith", 40, "T001")
-    val teacher2 = Teacher("Ms. Johnson", 35, "T002")
+    val student1 = Student("Alice", 15)
+    val student2 = Student("Bob", 17)
+    val teacher1 = Teacher("Mr. Smith", 40)
+    val teacher2 = Teacher("Ms. Johnson", 35)
 
     mySchool.addMember(student1)
     mySchool.addMember(student2)
